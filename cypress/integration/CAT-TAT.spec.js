@@ -38,7 +38,7 @@ describe('Central de Atendimento ao Cliente TAT', function () {
     cy.get('#firstName').type('Erika');
     cy.get('#lastName').type('Moreno');
     cy.get('#email').type('erika@teste.com');
-    cy.get('#phone-checkbox').click('');
+    cy.get('#phone-checkbox').check();
     cy.get('#open-text-area').type('Texto');
     cy.contains('button', 'Enviar').click();
 
@@ -74,17 +74,17 @@ describe('Central de Atendimento ao Cliente TAT', function () {
     cy.get('.error').should('be.visible');
   });
 
-  it.only('envia o formulário com sucesso usando um comando customaizado', function () {
+  it('envia o formulário com sucesso usando um comando customaizado', function () {
     cy.fillMandatoryFieldsAndSubmit();
 
     cy.get('.success').should('be.visible');
   });
 
-  it('seleciona um produto(Youtube) por seu texto', function () {
-    cy.get('#product').select('Youtube').should('have.value', 'youtube');
+  it('seleciona um produto (Youtube) por seu texto', function () {
+    cy.get('#product').select('youtube').should('have.value', 'youtube');
   });
 
-  it('seleciona um produto(Mentoria) por seu valor (value)', function () {
+  it('seleciona um produto (Mentoria) por seu valor (value)', function () {
     cy.get('#product').select('mentoria').should('have.value', 'mentoria');
   });
 
@@ -98,12 +98,21 @@ describe('Central de Atendimento ao Cliente TAT', function () {
     cy.get('input[type="radio"][value="feedback"]').check()
   })
 
-  it.only('marca cada tipo de atendimento', function () {
+  it('marca cada tipo de atendimento', function () {
     cy.get('input[type="radio"]')
       .should('have.length', 3) 
       .each(function($radio) {
         cy.wrap($radio).check()
         cy.wrap($radio).should('be.checked')
       })
+  })
+
+  it('marcar ambos checkboxes, depois desmarcar o último', function() {
+    cy.get('input[type="checkbox"]')
+      .check()
+      .should('be.checked')
+      .last()
+      .uncheck()
+      .should('not.be.checked')
   })
 });
