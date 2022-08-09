@@ -115,4 +115,31 @@ describe('Central de Atendimento ao Cliente TAT', function () {
       .uncheck()
       .should('not.be.checked')
   })
+
+  it('seleciona um arquivo da pasta fixtures', function() {
+    cy.get('input[type="file"]')
+      .should('not.have.value')
+      .selectFile('./cypress/fixtures/example.json')
+      .should(function($input) {
+        expect($input[0].files[0].name).to.equal('example.json');
+      })
+  })
+
+  it('seleciona uma arquivo simulado em drag-and-drop', function() {
+    cy.get('input[type="file"]')
+      .should('not.have.value')
+      .selectFile('./cypress/fixtures/example.json', { action: 'drag-drop' })
+      .should(function($input) {
+        expect($input[0].files[0].name).to.equal('example.json');
+    })
+  })
+
+  it.only('seleciona um arquivo utilizando uma fixtures para o qual foi dada uma alias', function() {
+    cy.fixture('example.json').as('sampleFile')
+    cy.get('input[type="file"]')
+      .selectFile('@sampleFile')
+      .should(function($input) {
+        expect($input[0].files[0].name).to.equal('example.json');
+      })
+  })
 });
