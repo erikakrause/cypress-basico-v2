@@ -89,57 +89,67 @@ describe('Central de Atendimento ao Cliente TAT', function () {
   });
 
   it('seleciona um produto (Blog) por seu índice', function () {
-    cy.get('#product')
-      .select(1)
-      .should('have.value', 'blog')
-  })
+    cy.get('#product').select(1).should('have.value', 'blog');
+  });
 
   it('marca o tipo de atedimento "Feedback"', function () {
-    cy.get('input[type="radio"][value="feedback"]').check()
-  })
+    cy.get('input[type="radio"][value="feedback"]').check();
+  });
 
   it('marca cada tipo de atendimento', function () {
     cy.get('input[type="radio"]')
-      .should('have.length', 3) 
-      .each(function($radio) {
-        cy.wrap($radio).check()
-        cy.wrap($radio).should('be.checked')
-      })
-  })
+      .should('have.length', 3)
+      .each(function ($radio) {
+        cy.wrap($radio).check();
+        cy.wrap($radio).should('be.checked');
+      });
+  });
 
-  it('marcar ambos checkboxes, depois desmarcar o último', function() {
+  it('marcar ambos checkboxes, depois desmarcar o último', function () {
     cy.get('input[type="checkbox"]')
       .check()
       .should('be.checked')
       .last()
       .uncheck()
-      .should('not.be.checked')
-  })
+      .should('not.be.checked');
+  });
 
-  it('seleciona um arquivo da pasta fixtures', function() {
+  it('seleciona um arquivo da pasta fixtures', function () {
     cy.get('input[type="file"]')
       .should('not.have.value')
       .selectFile('./cypress/fixtures/example.json')
-      .should(function($input) {
+      .should(function ($input) {
         expect($input[0].files[0].name).to.equal('example.json');
-      })
-  })
+      });
+  });
 
-  it('seleciona uma arquivo simulado em drag-and-drop', function() {
+  it('seleciona uma arquivo simulado em drag-and-drop', function () {
     cy.get('input[type="file"]')
       .should('not.have.value')
       .selectFile('./cypress/fixtures/example.json', { action: 'drag-drop' })
-      .should(function($input) {
+      .should(function ($input) {
         expect($input[0].files[0].name).to.equal('example.json');
-    })
-  })
+      });
+  });
 
-  it.only('seleciona um arquivo utilizando uma fixtures para o qual foi dada uma alias', function() {
-    cy.fixture('example.json').as('sampleFile')
+  it('seleciona um arquivo utilizando uma fixtures para o qual foi dada uma alias', function () {
+    cy.fixture('example.json').as('sampleFile');
     cy.get('input[type="file"]')
       .selectFile('@sampleFile')
-      .should(function($input) {
+      .should(function ($input) {
         expect($input[0].files[0].name).to.equal('example.json');
-      })
+      });
+  });
+
+  it('verifica que a política de privacidade abre em outra aba sem a necessidade de um clique', function () {
+    cy.get('#privacy a').should('have.attr', 'target', '_blank');
+  });
+
+  it.only('acessa a página da política de privacidade removendo o target e então clicar no link', function () {
+    cy.get('#privacy a')
+    .invoke('removeAttr', 'target')
+    .click()
+
+    cy.contains('Talking About Testing').should('be.visible')
   })
 });
